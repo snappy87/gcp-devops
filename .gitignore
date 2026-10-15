@@ -1,5 +1,11 @@
+# Local Terraform directories and files
 .terraform/
 *.tfstate
-*.tfstate.backup
+*.tfstate.*
+crash.log
 *.tfvars
 .terraform.lock.hcl
+
+# IDE files
+.vscode/
+.DS_Store

@@ -35,7 +35,6 @@ jobs:
   terraform-deploy:
     name: "CD: Apply Infrastructure"
     needs: terraform-validate
-    # Only run apply when code is pushed directly to the main branch (e.g. after merging a PR)
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     runs-on: ubuntu-latest
     defaults:
@@ -49,7 +48,7 @@ jobs:
       - name: Authenticate to Google Cloud
         uses: google-github-actions/auth@v2
         with:
-          credentials_json: ${{ secrets.GCP_SA_KEY }}
+          credentials_json: "${{ secrets.GCP_SA_KEY }}"
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
@@ -61,34 +60,3 @@ jobs:
 
       - name: Terraform Apply
         run: terraform apply -auto-approve
-    ```
-
----
-
-### Step 2: Configure the GitHub Secret for GCP Authentication
-
-For GitHub Actions to provision resources in your GCP project, it needs secure authentication permissions. We use a GitHub Secret to store a GCP Service Account JSON key securely.
-
-#### 1. In your GCP Console:
-1. Create a Service Account (e.g., `github-actions-deployer`).
-2. Grant it required permissions for the assessment project (e.g., **Project Editor** or specific roles like **Kubernetes Engine Admin**, **Compute Admin**, and **Service Account Admin**).
-3. Create and download a **JSON Key** for this service account.
-
-#### 2. In your GitHub Repository:
-1. Go to your GitHub repository (`snappy87/gcp-devops`).
-2. Click on **Settings** $\rightarrow$ **Secrets and variables** $\rightarrow$ **Actions**.
-3. Click **New repository secret**.
-4. Name the secret exactly: `GCP_SA_KEY`.
-5. Paste the entire content of your downloaded GCP Service Account JSON key file into the value box.
-6. Click **Add secret**.
-
----
-
-### Step 3: Commit and Test the CD Pipeline
-
-Now that your CI/CD workflow is written and your credentials secret is stored in GitHub, push your changes:
-
-```bash
-git add .github/workflows/terraform-ci.yml
-git commit -m "ci(github-actions): upgrade workflow to full CI/CD deployment pipeline"
-git push origin main

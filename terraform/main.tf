@@ -41,3 +41,7 @@ resource "google_container_node_pool" "primary_nodes" {
     oauth_scopes = var.node_oauth_scopes
   }
 }
+
+workload_identity_config {
+    workload_pool = "${var.project_id}.svc.id.goog"
+  }

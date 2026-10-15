@@ -60,10 +60,10 @@ jobs:
 
       - name: Terraform Apply
         env:
-          TF_VAR_project_id: ${{ vars.GCP_PROJECT_ID }}
+          TF_VAR_project_id: ${{ vars.GCP_PROJECT_ID || secrets.GCP_PROJECT_ID || secrets.PROJECT_ID }}
         run: |
           if [ -z "$TF_VAR_project_id" ]; then
-            echo "::error::Set the GCP_PROJECT_ID repository variable in GitHub Actions."
+            echo "::error::Set GCP_PROJECT_ID or PROJECT_ID as a GitHub Actions repository variable or secret."
             exit 1
           fi
           terraform apply -input=false -auto-approve

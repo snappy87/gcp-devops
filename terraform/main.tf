@@ -23,7 +23,7 @@ resource "google_container_cluster" "primary" {
   initial_node_count       = var.cluster_initial_node_count
   network                  = google_compute_network.vpc.name
   subnetwork               = google_compute_subnetwork.subnet.name
-  deletion_protection = var.deletion_protection
+  deletion_protection      = var.deletion_protection
   ip_allocation_policy {
     cluster_ipv4_cidr_block  = var.cluster_ipv4_cidr_block
     services_ipv4_cidr_block = var.services_ipv4_cidr_block
